@@ -1,0 +1,7 @@
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Delta-V logo">
+  <path d="M60 14 L96 78 L24 78 Z" fill="#4169E1"/>
+  <path d="M60 38 L80 74 L40 74 Z" fill="#FFFFFF"/>
+  <path d="M30 64 L52 106 L62 106 L40 64 Z" fill="#001f3f"/>
+  <path d="M90 64 L68 106 L58 106 L80 64 Z" fill="#001f3f"/>
+  <circle cx="60" cy="104" r="5" fill="#4169E1"/>
+</svg>
