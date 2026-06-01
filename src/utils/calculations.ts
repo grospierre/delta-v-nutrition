@@ -61,6 +61,21 @@ const SODIUM_EXPERIENCE: Record<AthleteProfile['experience'], number> = {
 const clamp = (value: number, min: number, max: number): number =>
   Math.min(max, Math.max(min, value));
 
+/** +5 % hydration on technical trail, −5 % on road */
+const TERRAIN_HYDRATION_COEFF: Record<string, number> = {
+  'technical-trail': 1.05,
+  'rolling-path':    1.00,
+  'road':            0.95,
+};
+
+/** Caffeine plan per strategy choice */
+const CAFFEINE_CFG: Record<string, { total: number; doses: number; timing: string }> = {
+  none:  { total: 0,   doses: 0, timing: 'None planned' },
+  start: { total: 100, doses: 1, timing: 'At race start' },
+  mid:   { total: 100, doses: 1, timing: 'Mid-race boost' },
+  split: { total: 100, doses: 2, timing: 'Split doses (50 mg × 2)' },
+};
+
 export function calculateNutrition(
   athlete: AthleteProfile,
   race: RaceDetails,
@@ -69,18 +84,24 @@ export function calculateNutrition(
 ): NutritionPlan {
   const { level, score, paceKmh } = computeIntensity(race);
 
+  // FIX 3 — terrain affects hydration (+5 % technical, −5 % road)
+  const terrainCoeff = TERRAIN_HYDRATION_COEFF[race.terrain] ?? 1.0;
+
   const hydrationPerHour = clamp(
-    8 * athlete.weight * weather.hydrationCoeff * HYDRATION_INTENSITY[level],
+    8 * athlete.weight * weather.hydrationCoeff * HYDRATION_INTENSITY[level] * terrainCoeff,
     400,
     900,
   );
   const hydrationTotal = Math.round(hydrationPerHour * race.duration);
   const hydrationRefills = Math.ceil(hydrationTotal / 500);
 
-  const carbsPerHour = Math.min(
+  // FIX 2 — fructose-sensitive athletes are capped at 60 g/h (single-transporter max)
+  const isFructoseSensitive = athlete.digestiveTolerance === 'fructose-sensitive';
+  const rawCarbsPerHour = Math.min(
     90,
     0.6 * athlete.weight * CARBS_INTENSITY[level] * CARBS_EXPERIENCE[athlete.experience],
   );
+  const carbsPerHour = isFructoseSensitive ? Math.min(60, rawCarbsPerHour) : rawCarbsPerHour;
   const carbsTotal = Math.round(carbsPerHour * race.duration);
   const carbsServings = Math.ceil(carbsTotal / 25);
 
@@ -92,14 +113,16 @@ export function calculateNutrition(
   const sodiumTotal = Math.round(sodiumPerHour * race.duration);
   const sodiumTablets = Math.ceil(sodiumTotal / 500);
 
-  const longRace = race.duration >= 8;
-  const caffeineTotal = longRace ? 200 : 100;
-  const caffeineDoses = longRace ? 2 : 1;
-  const caffeineTiming = longRace ? 'At start + mid-race' : 'At race start';
+  // FIX 1 — caffeine driven by strategy choice
+  const caffCfg = CAFFEINE_CFG[strategy.caffeineStrategy ?? 'mid'];
+  const caffeineTotal  = caffCfg.total;
+  const caffeineDoses  = caffCfg.doses;
+  const caffeineTiming = caffCfg.timing;
 
   const caloriesTotal = Math.round(carbsTotal * 4);
 
-  const glucosePercent = carbsPerHour < 60 ? 100 : 80;
+  // FIX 2 — glucose/fructose split: fructose-sensitive → always 100% glucose
+  const glucosePercent  = (isFructoseSensitive || carbsPerHour < 60) ? 100 : 80;
   const fructosePercent = 100 - glucosePercent;
 
   const intervalHours = round1(race.duration / strategy.refuels);

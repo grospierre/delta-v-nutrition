@@ -68,25 +68,59 @@ export default function PDFExportPanel({ plan, athlete, race, strategy }: PDFExp
   return (
     <div className="max-w-6xl mx-auto px-6 mb-8">
       <div className="glass-card p-6">
-        <h2 className="text-xl font-bold text-brand-navy mb-4">📥 Export Your Plan</h2>
+        <div className="flex items-center gap-3 mb-5">
+          <div
+            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ background: 'rgba(65,105,225,0.12)' }}
+          >
+            <span className="text-xl leading-none">📥</span>
+          </div>
+          <div>
+            <h2 className="text-lg font-black text-gray-900 leading-tight">Export Your Plan</h2>
+            <p className="text-xs text-gray-500 font-medium">Download a printable PDF race-day card</p>
+          </div>
+        </div>
         <div className="flex flex-wrap gap-3 mb-4">
+          {/* Ghost / outline Preview button */}
           <button
             onClick={() => setShowPreview((v) => !v)}
-            className="border-2 border-brand-blue text-brand-blue font-semibold px-6 py-3 rounded-xl hover:bg-brand-light transition"
+            className="font-semibold px-6 py-3 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5"
+            style={{
+              background: 'rgba(255,255,255,0.72)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              border: '1.5px solid rgba(65,105,225,0.40)',
+              borderRadius: 12,
+              color: '#2952CC',
+              boxShadow: '0 2px 12px rgba(65,105,225,0.10)',
+            }}
           >
             👁️ {showPreview ? 'Hide' : 'Preview'} PDF
           </button>
+          {/* Solid gradient Download button */}
           <button
             onClick={downloadPDF}
             disabled={busy}
-            className="bg-brand-blue text-white font-bold px-6 py-3 rounded-xl hover:bg-brand-blue-dark transition shadow-md disabled:opacity-60"
+            className="font-bold px-6 py-3 text-white transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5 disabled:opacity-60"
+            style={{
+              background: 'linear-gradient(135deg, #4169E1 0%, #2952CC 100%)',
+              borderRadius: 12,
+              border: 'none',
+              boxShadow: '0 4px 20px rgba(65,105,225,0.45)',
+            }}
           >
             {busy ? '⏳ Generating…' : '📄 Download PDF'}
           </button>
         </div>
 
         {showPreview && (
-          <div className="border-2 border-dashed border-brand-blue/30 rounded-2xl p-4 bg-white/40 animate-fade-in">
+          <div
+            className="rounded-2xl p-4 animate-fade-in"
+            style={{
+              background: 'rgba(255,255,255,0.50)',
+              border: '1.5px dashed rgba(65,105,225,0.30)',
+            }}
+          >
             <p className="text-xs text-gray-400 text-center mb-3">
               PDF preview — this is exactly what will be downloaded
             </p>

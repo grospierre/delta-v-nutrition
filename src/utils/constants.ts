@@ -5,7 +5,9 @@ export const DEFAULT_ATHLETE: AthleteProfile = {
   age: 28,
   sex: 'M',
   vo2max: 55,
+  rhr: 60,
   experience: 'intermediate',
+  digestiveTolerance: 'none',
 };
 
 export const DEFAULT_RACE: RaceDetails = {
@@ -14,11 +16,14 @@ export const DEFAULT_RACE: RaceDetails = {
   elevationNeg: 2500,
   duration: 7,
   location: 'Chamonix',
+  terrain: 'technical-trail',
 };
 
 export const DEFAULT_STRATEGY: Strategy = {
   refuels: 4,
   objective: 'Just finish',
+  autonomy: 'self-supported',
+  caffeineStrategy: 'mid',
 };
 
 export const BRANDS: Brand[] = [
@@ -117,7 +122,7 @@ export const BRANDS: Brand[] = [
 
 export const TESTIMONIALS: Testimonial[] = [
   {
-    quote: 'Crushed my first UTMB with Delta-V. The refueling schedule was spot on the whole way.',
+    quote: "I used to plan my nutrition with spreadsheets and hope. Now I use Delta-V. My stomach and I have never been happier.",
     name: '@ultrarunner_23',
     source: 'Strava',
     rating: 5,
@@ -125,7 +130,7 @@ export const TESTIMONIALS: Testimonial[] = [
     race: 'UTMB 170km',
   },
   {
-    quote: 'Game changer. No more guessing on nutrition — the science is finally accessible.',
+    quote: "Finally, a tool that understands bonking at km 40 is NOT a personality trait. Science-backed nutrition = actually finishing races.",
     name: '@trailblazer_99',
     source: 'Komoot',
     rating: 5,
@@ -133,7 +138,7 @@ export const TESTIMONIALS: Testimonial[] = [
     race: 'CCC 100km',
   },
   {
-    quote: 'Finally a tool built by runners for runners. Used it for three races now.',
+    quote: "Delta-V did what my coach couldn't: make me stop guessing. 'How much carbs do I need?' Answer: enough. And Delta-V knows exactly how much.",
     name: '@endurance_king',
     source: 'Instagram',
     rating: 5,
@@ -141,7 +146,7 @@ export const TESTIMONIALS: Testimonial[] = [
     race: 'TDS 145km',
   },
   {
-    quote: 'The weather adjustment is genius. Nailed my hydration through 28°C of full sun.',
+    quote: "Plot twist: you CAN engineer your way through an ultra. Delta-V proved it. My climbs no longer end with me eating dirt.",
     name: '@montagne_runner',
     source: 'Strava',
     rating: 5,

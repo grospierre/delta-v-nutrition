@@ -1,5 +1,9 @@
 export type Sex = 'M' | 'F';
 export type Experience = 'beginner' | 'intermediate' | 'advanced' | 'elite';
+export type DigestiveTolerance = 'none' | 'gluten-free' | 'lactose-free' | 'fructose-sensitive';
+export type TerrainType = 'technical-trail' | 'rolling-path' | 'road';
+export type Autonomy = 'self-supported' | 'assistance';
+export type CaffeineStrategy = 'none' | 'start' | 'mid' | 'split';
 export type Objective = 'Just finish' | 'Target time';
 export type IntensityLevel = 'easy' | 'moderate' | 'hard' | 'very_hard';
 export type TempCategory = 'Cold' | 'Cool' | 'Mild' | 'Warm' | 'Hot';
@@ -9,7 +13,9 @@ export interface AthleteProfile {
   age: number;
   sex: Sex;
   vo2max: number;
+  rhr: number;
   experience: Experience;
+  digestiveTolerance: DigestiveTolerance;
 }
 
 export interface RaceDetails {
@@ -18,11 +24,16 @@ export interface RaceDetails {
   elevationNeg: number;
   duration: number;
   location: string;
+  raceName?: string;
+  terrain: TerrainType;
 }
 
 export interface Strategy {
   refuels: number;
   objective: Objective;
+  budget?: number;
+  autonomy: Autonomy;
+  caffeineStrategy: CaffeineStrategy;
 }
 
 export interface WeatherData {
